@@ -6,9 +6,9 @@
     <title>Testing Team City Library CD</title>
     <authors>AP</authors>
     <owners>AP</owners>
-    <licenseUrl>n/a</licenseUrl>
-    <projectUrl>n/a</projectUrl>
-    <iconUrl>n/a</iconUrl>
+    <licenseUrl>http://google.com</licenseUrl>
+    <projectUrl>http://google.com</projectUrl>
+    <iconUrl>https://proxy.mc-market.org/f55a14af93f66030c17c4a6cf19d1dfb1de51bb5?url=https%3A%2F%2Fi.gyazo.com%2F12ea464af0e608db5aa5f487285d8416.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Testing CI/CD with TeamCity</description>
     <releaseNotes></releaseNotes>
