@@ -20,6 +20,6 @@
     <summary></summary>
   </metadata>
   <files>
-    <file src="" target="" />
+    <file src="bin\Debug\TestLibrary.dll" target="lib\TestLibrary.dll" />
   </files>
 </package>
