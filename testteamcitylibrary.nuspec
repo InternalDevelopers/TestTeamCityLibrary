@@ -6,9 +6,9 @@
     <title>Testing Team City Library CD</title>
     <authors>AP</authors>
     <owners>AP</owners>
-    <licenseUrl></licenseUrl>
-    <projectUrl></projectUrl>
-    <iconUrl></iconUrl>
+    <licenseUrl>n/a</licenseUrl>
+    <projectUrl>n/a</projectUrl>
+    <iconUrl>n/a</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Testing CI/CD with TeamCity</description>
     <releaseNotes></releaseNotes>
