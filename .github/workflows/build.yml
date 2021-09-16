@@ -51,8 +51,8 @@ jobs:
         run: |
           mkdir built
           echo "Buid number is"
-          echo ${env:BUILD_NUMBER}
-          $newFilePath = ".\built\TestLibrary" + ${env:BUILD_NUMBER} + ".dll"
+          echo ${{ env.BUILD_NUMBER }}
+          $newFilePath = ".\built\TestLibrary" + ${{ env.BUILD_NUMBER }} + ".dll"
           echo "New File Path is"
           echo $newFilePath
           mv .\TestLibrary\bin\Debug\TestLibrary.dll $newFilePath
