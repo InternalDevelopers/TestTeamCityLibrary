@@ -51,7 +51,7 @@ jobs:
       - name: Take CPZ
         run: |
           mkdir built
-          mv '\TestLibrary\TestLibrary\bin\debug\TestLibrary.dll' built
+          mv '.\TestLibrary\TestLibrary\bin\debug\TestLibrary.dll' built
         
      # - name: FTP Deploy
      #   uses: sebastianpopp/ftp-action@v2.0.0
