@@ -1,26 +1,25 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
-
-# Controls when the workflow will run
+name: ReleaseTasks
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ main ]
-    
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: windows-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+  buildnumber:
+    runs-on: ubuntu-latest
+    outputs:
+      build_number: ${{ steps.buildnumber.outputs.build_number }}
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Generate a build number
+      id: buildnumber
+      uses: einaregilsson/build-number@v3
+      with:
+        token: ${{ secrets.github_token }}
+    
+  build:
+    needs: buildnumber
+    runs-on: windows-latest
+    steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
@@ -51,7 +50,9 @@ jobs:
       - name: Take CPZ
         run: |
           mkdir built
+          $fileName = "TestLibrary" + ${env:BUILD_NUMBER} + ".dll"
           mv .\TestLibrary\bin\Debug\TestLibrary.dll built
+          Rename-Item -Path ".\built\TestLibrary.dll" -NewName ".\built\" + $fileName
         
       - name: FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
