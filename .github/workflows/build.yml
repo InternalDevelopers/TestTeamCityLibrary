@@ -43,7 +43,22 @@ jobs:
           additionalArguments: '/updateAssemblyInfo'
         
       - name: Restore NuGet Packages
-        run: nuget restore TestLibrary/TestLibrary.sln
+        run: nuget restore TestLibrary/TestLibrary.sln /property:Configuration=Debug
         
       - name: Build Solution
         run: msbuild TestLibrary/TestLibrary.sln
+        
+      - name: Take CPZ
+        run: |
+          mkdir built
+          mv 'TestLibrary/TestLibrary/bin/debug/TestLibrary.dll' built
+        
+      - name: FTP Deploy
+        uses: sebastianpopp/ftp-action@v2.0.0
+        with:
+          host: ${{ secrets.FTP_HOST:secrets.FTP_PORT }}
+          user: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          forceSsl: false
+          localDir: 'built'
+          remoteDir: '/Broadway/software/debug'
