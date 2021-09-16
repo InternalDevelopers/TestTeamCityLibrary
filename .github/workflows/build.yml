@@ -54,11 +54,12 @@ jobs:
           mv .\TestLibrary\bin\Debug\TestLibrary.dll built
         
       - name: FTP Deploy
-        uses: sebastianpopp/ftp-action@v2.0.0
+        uses: SamKirkland/FTP-Deploy-Action@4.1.0
         with:
-          host: ${{ secrets.FTP_HOST }}:${{ secrets.FTP_PORT }}
-          user: ${{ secrets.FTP_USER }}
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
-          forceSsl: false
-          localDir: 'built'
-          remoteDir: '/Broadway/software/debug'
+          port: ${{ secrets.FTP_PORT }}
+          protocol: ftp
+          local-dir: built/
+          server-dir: /Broadway/software/debug/
