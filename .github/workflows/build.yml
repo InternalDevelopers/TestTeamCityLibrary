@@ -53,12 +53,12 @@ jobs:
           mkdir built
           mv .\TestLibrary\bin\Debug\TestLibrary.dll built
         
-     # - name: FTP Deploy
-     #   uses: sebastianpopp/ftp-action@v2.0.0
-     #   with:
-     #     host: ${{ secrets.FTP_HOST }}:${{ secrets.FTP_PORT }}
-     #     user: ${{ secrets.FTP_USER }}
-     #     password: ${{ secrets.FTP_PASSWORD }}
-     #     forceSsl: false
-     #     localDir: 'built'
-     #     remoteDir: '/Broadway/software/debug'
+      - name: FTP Deploy
+        uses: sebastianpopp/ftp-action@v2.0.0
+        with:
+          host: ${{ secrets.FTP_HOST }}:${{ secrets.FTP_PORT }}
+          user: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          forceSsl: false
+          localDir: 'built'
+          remoteDir: '/Broadway/software/debug'
