@@ -30,7 +30,7 @@ jobs:
         uses: NuGet/setup-nuget@v1.0.5
         
       - name: Restore NuGet Packages
-        run: nuget restore TestLibrary.sln
+        run: nuget restore TestLibrary/TestLibrary.sln
         
       - name: Build Solution
-        run: msbuild TestLibrary.sln
+        run: msbuild TestLibrary/TestLibrary.sln
