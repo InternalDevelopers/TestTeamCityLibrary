@@ -50,10 +50,9 @@ jobs:
       - name: Take CPZ
         run: |
           mkdir built
-          $fileName = "TestLibrary" + ${env:BUILD_NUMBER} + ".dll"
-          mv .\TestLibrary\bin\Debug\TestLibrary.dll built
-          Rename-Item -Path ".\built\TestLibrary.dll" -NewName ".\built\" + $fileName
-        
+          $newFilePath = ".\built\TestLibrary" + ${env:BUILD_NUMBER} + ".dll"
+          mv .\TestLibrary\bin\Debug\TestLibrary.dll $newFilePath
+                  
       - name: FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
         with:
