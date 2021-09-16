@@ -43,10 +43,10 @@ jobs:
           additionalArguments: '/updateAssemblyInfo'
         
       - name: Restore NuGet Packages
-        run: nuget restore TestLibrary/TestLibrary.sln /property:Configuration=Debug
+        run: nuget restore TestLibrary/TestLibrary.sln
         
       - name: Build Solution
-        run: msbuild TestLibrary/TestLibrary.sln
+        run: msbuild TestLibrary/TestLibrary.sln /property:Configuration=Debug
         
       - name: Take CPZ
         run: |
