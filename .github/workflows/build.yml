@@ -31,16 +31,16 @@ jobs:
       - name: Setup NuGet
         uses: NuGet/setup-nuget@v1.0.5
         
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0.9.7
-        with: 
-          versionSpec: '5.x'
+    #  - name: Install GitVersion
+    #    uses: gittools/actions/gitversion/setup@v0.9.7
+    #    with: 
+    #      versionSpec: '5.x'
           
-      - name: Determine Version
-        id: gitversion
-        uses: gittools/actions/gitversion/execute@v0.9.7
-        with:
-          additionalArguments: '/updateAssemblyInfo'
+    #  - name: Determine Version
+    #    id: gitversion
+    #    uses: gittools/actions/gitversion/execute@v0.9.7
+    #    with:
+    #      additionalArguments: '/updateAssemblyInfo'
         
       - name: Restore NuGet Packages
         run: nuget restore TestLibrary/TestLibrary.sln
@@ -51,14 +51,14 @@ jobs:
       - name: Take CPZ
         run: |
           mkdir built
-          mv 'TestLibrary/TestLibrary/bin/debug/TestLibrary.dll' built
+          mv '\TestLibrary\TestLibrary\bin\debug\TestLibrary.dll' built
         
-      - name: FTP Deploy
-        uses: sebastianpopp/ftp-action@v2.0.0
-        with:
-          host: ${{ secrets.FTP_HOST }}:${{ secrets.FTP_PORT }}
-          user: ${{ secrets.FTP_USER }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          forceSsl: false
-          localDir: 'built'
-          remoteDir: '/Broadway/software/debug'
+     # - name: FTP Deploy
+     #   uses: sebastianpopp/ftp-action@v2.0.0
+     #   with:
+     #     host: ${{ secrets.FTP_HOST }}:${{ secrets.FTP_PORT }}
+     #     user: ${{ secrets.FTP_USER }}
+     #     password: ${{ secrets.FTP_PASSWORD }}
+     #     forceSsl: false
+     #     localDir: 'built'
+     #     remoteDir: '/Broadway/software/debug'
