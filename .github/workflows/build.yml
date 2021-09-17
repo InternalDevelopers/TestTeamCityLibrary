@@ -55,7 +55,7 @@ jobs:
       - name: Build Solution
         run: msbuild TestLibrary/TestLibrary.sln /property:Configuration=Debug
         
-      - name: Take CPZ
+      - name: Take DLL
         run: |
           mkdir built
           echo "Buid number is"
