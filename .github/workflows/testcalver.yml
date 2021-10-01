@@ -44,3 +44,29 @@ jobs:
         with:
           name: calver
           path: calver.txt
+          
+  readvar:
+    name: Read Variable
+    needs: calver
+    runs-on: windows-latest
+    steps:
+      - name: Download Variable File
+        uses: actions/download-artifact@v2
+        with:
+          name: calver
+        
+      - shell: bash
+        id: output_var
+        run: |
+          input_file="calver.txt"
+          while read line
+          do
+          file_text=$line
+          done < "$input_file"
+          echo ::set-output name=new_value::$file_text
+      
+      - name: get var
+        run: echo ${{steps.output_test.outputs.new_value}}
+        
+        
+  
