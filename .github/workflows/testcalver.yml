@@ -1,0 +1,116 @@
+name: ReleaseTasks
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:  
+  calver:
+    name: CalVer
+    runs-on: ubuntu-latest
+    steps:
+      - name: Calver Release
+        uses: StephaneBour/actions-calver@v1.3
+        id: calver
+        with:
+          release_branch: main
+          date_format: "%Y.%m.%d.%H%M%S"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - shell: bash
+        run: |
+          echo "Buid number is"
+          echo ${steps.calver.outputs.release}
+          ${steps.calver.outputs.release} > calver.txt
+      
+      - name: Upload CalVer
+        uses: actions/upload-artifact@v2
+        with:
+          name: calver
+          path: calver.txt
+          
+  build:
+    name: Build
+    needs: calver
+    runs-on: windows-latest
+    # Outputs are like variables that can be used later on
+    outputs:
+      # Accessors used below - 
+      # steps = the steps process below
+      # buildnumber = the id given to the step called Generate a build number
+      # outputs = the object 'outputs' as determined by the external code being run
+      # build_number = the variable within outputs
+      build_number: ${{ steps.buildnumber.outputs.build_number }}
+    steps:
+      # Checks out code to virtual machine
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Get CalVer
+        uses: actions/download-artifact@v2
+        with:
+          name: calver
+          
+      - shell: bash
+        run: |
+          value =`cat calver.txt`
+          echo "CALVER=$value" >> GITHUB_ENV
+      - name: Test Calver
+        run: echo $CALVER
+        
+     # - name: Get Build Version
+     #   run: |
+     #     Import-Module .\build\GetBuildVersion.psm1
+     #     Write-Host $Env:GITHUB_REF
+     #     $version = GetBuildVersion -VersionString $Env:GITHUB_REF
+     #     echo "BUILD_VERSION=$version" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+     #   shell: pwsh
+      
+      # Runs external script to create a build number
+      #- name: Generate a build number
+      #  id: buildnumber
+      #  uses: einaregilsson/build-number@v3
+      #  with:
+      #    token: ${{ secrets.github_token }}
+      
+      # Setup MS Build on virtual machine
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.0.3
+      
+      # Setup NuGet on virtual machine
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1.0.5
+        
+      # Restore all NuGet packages stated within csproj which is referenced by the sln file
+      - name: Restore NuGet Packages
+        run: nuget restore TestLibrary/TestLibrary.sln
+      
+      # Build the solution, whilst stating the configurtion
+      - name: Build Solution
+        run: msbuild TestLibrary/TestLibrary.sln /property:Configuration=Debug
+      
+      # Move a file to a new folder location so the FTP can sync that entire folder
+      - name: Take DLL
+        run: |
+          Write-Host 
+          mkdir built
+          echo "Buid number is"
+          echo ${{ env.BUILD_NUMBER }}
+          $newFilePath = ".\built\TestLibrary" + ${{ env.BUILD_NUMBER }} + ".dll"
+          echo "New File Path is"
+          echo $newFilePath
+          mv .\TestLibrary\bin\Debug\TestLibrary.dll $newFilePath
+      
+      # Sync a folder to an ftp server
+      # All 'secrets' are listed in the repo's settings
+      - name: FTP Deploy
+        uses: SamKirkland/FTP-Deploy-Action@4.1.0
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: ${{ secrets.FTP_PORT }}
+          protocol: ftp
+          local-dir: built/
+          server-dir: /Broadway/software/debug/
