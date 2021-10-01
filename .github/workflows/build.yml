@@ -47,6 +47,7 @@ jobs:
       # Move a file to a new folder location so the FTP can sync that entire folder
       - name: Take DLL
         run: |
+          Write-Host $Env:GITHUB_REF
           mkdir built
           echo "Buid number is"
           echo ${{ env.BUILD_NUMBER }}
