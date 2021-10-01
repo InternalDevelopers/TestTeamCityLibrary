@@ -5,22 +5,9 @@ on:
   workflow_dispatch:
 
 jobs:  
-  build:
-    runs-on: windows-latest
-    # Outputs are like variables that can be used later on
-    outputs:
-      # Accessors used below - 
-      # steps = the steps process below
-      # buildnumber = the id given to the step called Generate a build number
-      # outputs = the object 'outputs' as determined by the external code being run
-      # build_number = the variable within outputs
-      build_number: ${{ steps.buildnumber.outputs.build_number }}
+  calver:
+    runs-on: ubuntu-latest
     steps:
-      # Checks out code to virtual machine
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      
       - name: Calver Release
         uses: StephaneBour/actions-calver@master
         id: calver
@@ -37,6 +24,25 @@ jobs:
           mkdir built
           echo "Buid number is"
           echo ${VERSION}
+    
+
+  build:
+    runs-on: windows-latest
+    # Outputs are like variables that can be used later on
+    outputs:
+      # Accessors used below - 
+      # steps = the steps process below
+      # buildnumber = the id given to the step called Generate a build number
+      # outputs = the object 'outputs' as determined by the external code being run
+      # build_number = the variable within outputs
+      build_number: ${{ steps.buildnumber.outputs.build_number }}
+    steps:
+      # Checks out code to virtual machine
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      
+      
       
      # - name: Get Build Version
      #   run: |
