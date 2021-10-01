@@ -20,6 +20,9 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Test
+        run: |
+          echo $Env:GITHUB_REF
 
       # Runs external script to create a build number
       - name: Generate a build number
@@ -47,7 +50,7 @@ jobs:
       # Move a file to a new folder location so the FTP can sync that entire folder
       - name: Take DLL
         run: |
-          Write-Host $Env:GITHUB_REF
+          Write-Host 
           mkdir built
           echo "Buid number is"
           echo ${{ env.BUILD_NUMBER }}
