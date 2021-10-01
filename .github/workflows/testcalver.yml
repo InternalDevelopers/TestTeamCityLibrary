@@ -25,6 +25,19 @@ jobs:
           echo "Buid number is"
           echo $x
           echo $x >> calver.txt
+          
+      - name: Read and assign
+        id: output_test
+        run: |
+          input_file="calver.txt"
+          while read line
+          do
+          file_text=$line
+          done < "$input_file"
+          echo ::set-output name=new_value::$file_text
+      
+      - name: get var
+        run: echo ${{steps.output_test.outputs.new_value}}
       
       - name: Upload CalVer
         uses: actions/upload-artifact@v2
