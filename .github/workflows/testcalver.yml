@@ -1,0 +1,30 @@
+name: Testing
+on:
+  push:
+    branches: [ main ]
+
+jobs:  
+  calver:
+    name: CalVer
+    runs-on: ubuntu-latest
+    steps:
+      - name: Calver Release
+        uses: StephaneBour/actions-calver@v1.3
+        id: calver
+        with:
+          release_branch: main
+          date_format: "%Y.%m.%d.%H%M%S"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - shell: bash
+        run: |
+          echo "Buid number is"
+          echo ${steps.calver.outputs.release}
+          ${steps.calver.outputs.release} > calver.txt
+      
+      - name: Upload CalVer
+        uses: actions/upload-artifact@v2
+        with:
+          name: calver
+          path: calver.txt
