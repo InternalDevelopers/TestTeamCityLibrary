@@ -9,9 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Calver Release
-        uses: StephaneBour/actions-calver@master
+        uses: StephaneBour/actions-calver@v1.3
         id: calver
         with:
+          release_branch: main
           date_format: "%Y.%m.%d.%H%M%S"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -24,7 +25,6 @@ jobs:
           mkdir built
           echo "Buid number is"
           echo ${VERSION}
-    
 
   build:
     runs-on: windows-latest
