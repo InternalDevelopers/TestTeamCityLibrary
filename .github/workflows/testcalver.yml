@@ -66,7 +66,11 @@ jobs:
           echo ::set-output name=new_value::$file_text
       
       - name: get var
-        run: Write-Output ${{steps.output_test.outputs.new_value}}
+        env:
+          CALVER: ${{steps.output_test.outputs.new_value}}
+        run: |
+          x=$CALVER
+          Write-Output $x
         
         
   
