@@ -18,10 +18,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - shell: bash
+        env:
+          CALVER: ${steps.calver.outputs.release}
         run: |
+          x=$CALVER
           echo "Buid number is"
-          echo ${steps.calver.outputs.release}
-          ${steps.calver.outputs.release} > calver.txt
+          echo $x
+          $x > calver.txt
       
       - name: Upload CalVer
         uses: actions/upload-artifact@v2
