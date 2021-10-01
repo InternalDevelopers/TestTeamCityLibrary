@@ -21,13 +21,30 @@ jobs:
         with:
           fetch-depth: 0
       
-      - name: Get Build Version
+      - name: Calver Release
+        uses: StephaneBour/actions-calver@master
+        id: calver
+        with:
+          date_format: "%Y.%m.%d.%H%M%S"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Take DLL
+        env:
+          VERSION: ${{ steps.calver.outputs.release }}
         run: |
-          Import-Module .\build\GetBuildVersion.psm1
-          Write-Host $Env:GITHUB_REF
-          $version = GetBuildVersion -VersionString $Env:GITHUB_REF
-          echo "BUILD_VERSION=$version" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
-        shell: pwsh
+          Write-Host 
+          mkdir built
+          echo "Buid number is"
+          echo ${VERSION}
+      
+     # - name: Get Build Version
+     #   run: |
+     #     Import-Module .\build\GetBuildVersion.psm1
+     #     Write-Host $Env:GITHUB_REF
+     #     $version = GetBuildVersion -VersionString $Env:GITHUB_REF
+     #     echo "BUILD_VERSION=$version" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+     #   shell: pwsh
       
       # Runs external script to create a build number
       #- name: Generate a build number
