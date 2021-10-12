@@ -65,5 +65,6 @@ jobs:
           done < "$input_file"
           echo ::set-output name=new_value::$file_text
       
+      # test
       - name: get var
         run: echo ${{steps.output_var.outputs.new_value}}
